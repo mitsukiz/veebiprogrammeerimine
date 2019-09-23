@@ -6,7 +6,6 @@
 	if($hourNow < 8){
 		$partOfDay = "varane hommik";
 	}
-
 ?>
 
 <!DOCTYPE html>
