@@ -1,8 +1,10 @@
 <?php
   require("../../../config.php");
-  require("functions_film.php");
+  require("functions_main.php");
   require("functions_user.php");
-  $database = "if19_daniel_gu";
+  $database = "if19_daniel_gu_1";
+  
+  
   
   $notice = null;
   $name = null;
@@ -44,13 +46,18 @@
 		$nameError = "Palun sisestage eesnimi!";
 	} //eesnime kontrolli lõpp
 	
-	//ajutine
-	$surname = ($_POST["surName"]);
-	$gender = $_POST["gender"];
-	$email = test_input($_POST["email"]);
-	//
+	if (isset($_POST["surName"]) and !empty($_POST["surName"])){
+		$surname = test_input($_POST["surName"]);
+	} else {
+		$surnameError = "Palun sisesta perekonnanimi!";
+	}
 	
-	
+	if(isset($_POST["gender"])){
+	    $gender = intval($_POST["gender"]);
+	} else {
+		$genderError = "Palun märgi sugu!";
+	}
+
 	//kontrollime, kas sünniaeg sisestati ja kas on korrektne
 	  if(isset($_POST["birthDay"]) and !empty($_POST["birthDay"])){
 		  $birthDay = intval($_POST["birthDay"]);
@@ -75,11 +82,38 @@
 		  if(checkdate($birthMonth, $birthDay, $birthYear)){
 			  $tempDate = new DateTime($birthYear ."-" .$birthMonth ."-" .$birthDay);
 			  $birthDate = $tempDate->format("Y-m-d");
-			  echo $birthDate;
+			  //echo $birthDate;
 		  } else {
 			  $birthDateError= "Valitud kuupäev on vigane!";
 		  }//checkdate
 	  }//kuupäeva valiidsus
+	  
+	//email ehk kasutajatunnus
+	
+	  if (isset($_POST["email"]) and !empty($_POST["email"])){
+		$email = test_input($_POST["email"]);
+	  } else {
+		  $emailError = "Palun sisesta e-postiaadress!";
+	  }
+	  
+	  //parool ja selle kaks korda sisestamine
+	  
+	  if (!isset($_POST["password"]) or empty($_POST["password"])){
+		$passwordError = "Palun sisesta salasõna!";
+	  } else {
+		  if(strlen($_POST["password"]) < 8){
+			  $passwordError = "Liiga lühike salasõna (sisestasite ainult " .strlen($_POST["password"]) ." märki).";
+		  }
+	  }
+	  
+	  if (!isset($_POST["confirmpassword"]) or empty($_POST["confirmpassword"])){
+		$confirmpasswordError = "Palun sisestage salasõna kaks korda!";  
+	  } else {
+		  if($_POST["confirmpassword"] != $_POST["password"]){
+			  $confirmpasswordError = "Sisestatud salasõnad ei olnud ühesugused!";
+		  }
+	  }
+
 	
 		//Kui kõik on korras, salvestame
 	if(empty($nameError) and empty($surnameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError)and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError) and empty($confirmpasswordError)){
