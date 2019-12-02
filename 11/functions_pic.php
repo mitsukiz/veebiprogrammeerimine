@@ -46,7 +46,8 @@
 		$stmt->execute();
 		while($stmt->fetch()){
 			//<img src="thumbs_kataloog/pilt" alt=""> \n
-			$picHTML .= '<img src="' .$GLOBALS["pic_upload_dir_thumb"] .$fileNameFromDb .'" alt="' .$altTextFromDb .'">' ."\n";
+			//<img src="thumbs_kataloog/pilt" alt="" data-fn="failinimi"> \n
+			$picHTML .= '<img src="' .$GLOBALS["pic_upload_dir_thumb"] .$fileNameFromDb .'" alt="' .$altTextFromDb .'" data-fn="' .$fileNameFromDb .'">' ."\n";
 		}
 		if($picHTML == null){
 			$picHTML = "<p>Kahjuks avalikke pilte pole!</p>";
